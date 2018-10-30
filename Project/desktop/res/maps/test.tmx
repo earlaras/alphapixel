@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="40" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="20">
+ <tileset firstgid="1" source="../../../../res/maps/jungle.tsx"/>
+ <layer id="1" name="level" width="40" height="8">
+  <data encoding="base64" compression="zlib">
+   eJzlklEOwCAIQ7mEJx3g9RcTGolBcWb7WpPGHywPhegfuj7KZctuZ30h75RTzY1DHFeZ1MthH+gJZ+tVjakEnkmdT3XRmlXMEVfG58WLfKa+H9m7VbNYrSZshfqMWTa7OuzqmAXWGRtvMo18mB1WNydmHf8h4vOc2CsN7u76BhbbIXg=
+  </data>
+ </layer>
+ <objectgroup id="2" name="crystals">
+  <object id="1" x="30" y="40.6667">
+   <ellipse/>
+  </object>
+  <object id="2" x="65.3333" y="40.6667">
+   <ellipse/>
+  </object>
+  <object id="3" x="100" y="40.6667">
+   <ellipse/>
+  </object>
+  <object id="4" x="272" y="103.333">
+   <ellipse/>
+  </object>
+  <object id="5" x="544.667" y="134.667">
+   <ellipse/>
+  </object>
+  <object id="10" x="400" y="167.333">
+   <ellipse/>
+  </object>
+  <object id="11" x="432" y="167.333">
+   <ellipse/>
+  </object>
+  <object id="12" x="78.6667" y="167.333">
+   <ellipse/>
+  </object>
+  <object id="13" x="592.667" y="10">
+   <ellipse/>
+  </object>
+  <object id="15" x="800" y="104.667">
+   <ellipse/>
+  </object>
+  <object id="16" x="1102.67" y="39.3333">
+   <ellipse/>
+  </object>
+  <object id="17" x="1184.67" y="39.3333">
+   <ellipse/>
+  </object>
+  <object id="18" x="1264.67" y="39.3333">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>

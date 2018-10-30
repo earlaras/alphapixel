@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="40" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" source="../../../../res/maps/jungle.tsx"/>
+ <layer id="1" name="level" width="40" height="8">
+  <data encoding="base64" compression="zlib">
+   eJztku0KgDAIRX2JntTpXr+kK4lYLQgG0YXD/uzjOCX684UoaBuClacaHTGfTrvTkpgdAdnrLT/vhWF/cNeTDgR79cLtqZ/PBOMNKu5z1zO3NuAU0fAeBzTU6bXmPlR+0dPnSouzo6wx3BnQ
+  </data>
+ </layer>
+</map>
