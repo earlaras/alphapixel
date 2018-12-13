@@ -13,9 +13,10 @@ public class Animation {
 	
 	public Animation() {}
 	
-	public Animation(TextureRegion[] frames) {
+	public Animation(TextureRegion[] frames, int type) {
 		
 		this(frames, 1 / 12f, 0);
+		this.typeOfAnim = type;
 		
 	}
 	

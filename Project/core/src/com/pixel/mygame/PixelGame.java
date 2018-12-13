@@ -32,21 +32,23 @@ public class PixelGame extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(new MyInputProcessor());
 		
 		res = new Content();
-		res.loadTexture("res/runningSheet.png", "runr");
-		res.loadTexture("res/runningSheet2.png", "runl");
-		res.loadTexture("res/idle.png", "idle");
-		res.loadTexture("res/idle2.png", "idle2");
+		res.loadTexture("res/run_right.png", "runr");
+		res.loadTexture("res/run_left.png", "runl");
+		res.loadTexture("res/idle_alt.png", "idle");
+		res.loadTexture("res/idle_left.png", "idle2");
 		res.loadTexture("res/crystal.png", "crystal");
 		res.loadTexture("res/images/junglee.png", "background");
 		res.loadTexture("res/images/num.png", "num");
 		res.loadTexture("res/images/x.png", "x");
 		res.loadTexture("res/images/hudcr.png", "hudcr");
-		res.loadTexture("res/attack.png", "a1");
-		res.loadTexture("res/attack2.png", "a2");
-		res.loadTexture("res/jumpr.png", "jumpr");
-		res.loadTexture("res/jumpl.png", "jumpl");
+		res.loadTexture("res/attack_right.png", "attack");
+		res.loadTexture("res/jump_right.png", "jumpr");
+		res.loadTexture("res/jump_left.png", "jumpl");
 		res.loadTexture("res/falll.png", "falll");
 		res.loadTexture("res/fallr.png", "fallr");
+		res.loadTexture("res/snakeidle.png", "snakeidle");
+		res.loadTexture("res/snakeleft.png", "snakeleft");
+		res.loadTexture("res/snakeright.png", "snakeright");
 		
 		res.loadSound("res/bgm/Skyliner.mp3", "theme");
 		res.loadSound("res/bgm/crystal.mp3", "crystal");

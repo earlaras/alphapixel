@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.pixel.handlers.MyContactListener;
 import com.pixel.handlers.MyInput;
 import com.pixel.mygame.PixelGame;
 
@@ -19,10 +20,10 @@ public class Player extends B2DSprite{
 		
 			Texture tex = PixelGame.res.getTexture("idle");
 			
-			TextureRegion[] sprites = TextureRegion.split(tex, 46 , 46)[0];
+			TextureRegion[] sprites = TextureRegion.split(tex, 32 , 40)[0];
 			
-			setAnimation(sprites, 1/12f, 0);	
-					
+			setAnimation(sprites, 1/12f, 0);
+			
 	}
 	
 	public void collectCrystal() { numCrystals++; }
@@ -32,5 +33,6 @@ public class Player extends B2DSprite{
 	public void setTotalCrystals (int i) { totalCrystals = i; }
 	
 	public int getTotalCrystals() { return totalCrystals; }
+	
 
 }

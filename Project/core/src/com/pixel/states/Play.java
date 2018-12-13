@@ -2,7 +2,11 @@ package com.pixel.states;
 
 import static com.pixel.handlers.B2DVars.PPM;
 
+import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardDownRightHandler;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.steer.SteerableAdapter;
+import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -28,6 +32,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.pixel.entities.Crystal;
+import com.pixel.entities.Enemy;
 import com.pixel.entities.HUD;
 import com.pixel.entities.Player;
 import com.pixel.handlers.Animation;
@@ -35,6 +40,7 @@ import com.pixel.handlers.B2DVars;
 import com.pixel.handlers.GameStateManager;
 import com.pixel.handlers.MyContactListener;
 import com.pixel.handlers.MyInput;
+import com.pixel.handlers.MyInputProcessor;
 import com.pixel.mygame.PixelGame;
 
 public class Play extends GameState {
@@ -55,11 +61,14 @@ public class Play extends GameState {
 	private Player player;
 	private Array<Crystal> crystals;
 	private HUD hud;
+	private Enemy snake;
 	
 	public Texture tex;
 	public int anim;
 	public Sound sd;
 	public Sprite spr;
+	
+	private float timeAttack;
 	
 	public Play (GameStateManager gsm) {
 		
@@ -91,6 +100,10 @@ public class Play extends GameState {
 		
 		createCrystals();
 		
+		//CREATE ENEMY
+		
+		createEnemy();
+		
 		//SET A BOX2D CAM
 		b2dCam = new OrthographicCamera();
 		b2dCam.setToOrtho(false, PixelGame.vWIDTH/PPM, PixelGame.vHEIGHT/PPM);
@@ -98,9 +111,52 @@ public class Play extends GameState {
 		//SET UP HUD
 		hud = new HUD(player);
 				
-			}
-	
+	}
+		
 	public void handleInput() {
+		
+
+		
+		
+		//STILL
+		if (cl.isPlayerOnGround()) {
+			
+			
+			
+			
+		}
+		
+		if (!MyInput.isDown(MyInput.BUTTON4) && !MyInput.isDown(MyInput.BUTTON3) && !MyInput.isDown(MyInput.BUTTON2) && !MyInput.isDown(MyInput.BUTTON1)) {
+			
+			player.getBody().setLinearVelocity(0f, player.getBody().getLinearVelocity().y);
+			
+			if (anim == 2 || anim == 8 || anim == 4) {
+				
+				tex = PixelGame.res.getTexture("idle2");
+				
+				TextureRegion[] sprites = TextureRegion.split(tex, 32 , 40)[0];
+				
+				anim = -2;
+				player.setAnimation(sprites, 1/12f, 0);
+				
+				
+			
+			} else if (anim == 3 || anim == 9 || anim == 5) {
+				
+				tex = PixelGame.res.getTexture("idle");
+				
+				TextureRegion[] sprites = TextureRegion.split(tex, 32 , 40)[0];
+				
+				anim = -3;
+				player.setAnimation(sprites, 1/12f, 0);
+				
+				
+				
+			}
+			
+			
+		}
+		
 		
 		//PLAYER JUMP
 		if(MyInput.isPressed(MyInput.BUTTON1)) {
@@ -111,55 +167,74 @@ public class Play extends GameState {
 				
 				player.getBody().applyForceToCenter(0, 200, true);
 					
-					if (anim == -2 || anim == 2) {
-						
-						tex = PixelGame.res.getTexture("jumpl");
-						
-						TextureRegion[] sprites = TextureRegion.split(tex, 46 , 46)[0];
-						
-						player.setAnimation(sprites, 1/12f, 1);
-					
-						
-					} else if (anim == -3 || anim == 3) {
-						
-						tex = PixelGame.res.getTexture("jumpr");
-						
-						TextureRegion[] sprites = TextureRegion.split(tex, 46 , 46)[0];
-						
-						player.setAnimation(sprites, 1/12f, 1);
-						
-					
-				}
 				
 			}
 			
+			if(MyInput.isDown(MyInput.BUTTON1)) {
+			
+			if (anim == -2 || anim == 2) {
+				
+				Texture tex = PixelGame.res.getTexture("jumpl");
+				
+				TextureRegion[] sprites = TextureRegion.split(tex, 32 , 40)[0];
+				
+				Animation jump = new Animation(sprites, 1);
+				
+				player.setAnimation(jump);
+				
+				System.out.println(jump.getTimesPlayed());
+				
+				anim = 4;
+				
+				
+				
+			} else if (anim == -3 || anim == 3) {
+				
+				Texture tex = PixelGame.res.getTexture("jumpr");
+				
+				TextureRegion[] sprites = TextureRegion.split(tex, 32 , 40)[0];
+				
+				Animation jump = new Animation(sprites, 1);
+				
+				player.setAnimation(jump);
+				
+				System.out.println(jump.getTimesPlayed());
+				
+				anim = 5;
+			
+			} }
 			
 		}
 		
 		//PLAYER ATTACK
 		if(MyInput.isPressed(MyInput.BUTTON4)) {
 			
-			if (anim == -2 || anim == 2) {
+			if (timeAttack > 30) {
+			if (anim == -2 || anim == 2 || anim == 5) {
 				
-				tex = PixelGame.res.getTexture("a2");
+				tex = PixelGame.res.getTexture("attack");
 				
-				TextureRegion[] sprites = TextureRegion.split(tex, 46 , 46)[0];
+				TextureRegion[] sprites = TextureRegion.split(tex, 50 , 40)[0];
 				
-				player.setAnimation(sprites, 1/12f, 1);
+				player.setAnimation(sprites, 1/36f, 1);
+				
+				anim = 8;
 				
 				
+			} else if (anim == -3 || anim == 3 || anim == 4) {
 				
-			} else if (anim == -3 || anim == 3) {
+				tex = PixelGame.res.getTexture("attack");
 				
-				tex = PixelGame.res.getTexture("a1");
+				TextureRegion[] sprites = TextureRegion.split(tex, 50 , 40)[0];
 				
-				TextureRegion[] sprites = TextureRegion.split(tex, 46 , 46)[0];
+				player.setAnimation(sprites, 1/36f, 1);
 				
-				player.setAnimation(sprites, 1/12f, 1);
-				
+				anim = 9;
 			}
 			
+			timeAttack = 1;
 			
+		}
 		}
 		
 		//PLAYER LEFT
@@ -172,11 +247,12 @@ public class Play extends GameState {
 				
 				tex = PixelGame.res.getTexture("runl");
 				
-				TextureRegion[] sprites = TextureRegion.split(tex, 46 , 46)[0];
+				TextureRegion[] sprites = TextureRegion.split(tex, 32 , 40)[0];
 				
+				if (!MyInput.isDown(MyInput.BUTTON1)) {
 				anim = 2;
 				player.setAnimation(sprites, 1/12f, 0);
-				
+				}
 				
 			}
 			
@@ -190,49 +266,24 @@ public class Play extends GameState {
 			
 			if (cl.isPlayerOnGround()) {
 				
-			if(anim != 3) {
+				if(anim != 3) {
 			
-				tex = PixelGame.res.getTexture("runr");
+					tex = PixelGame.res.getTexture("runr");
 			
-				TextureRegion[] sprites = TextureRegion.split(tex, 46 , 46)[0];
+					TextureRegion[] sprites = TextureRegion.split(tex, 32 , 40)[0];
 				
-				anim = 3;
-				player.setAnimation(sprites, 1/12f, 0);
+					if (!MyInput.isDown(MyInput.BUTTON1)) {
+						anim = 3;
+						player.setAnimation(sprites, 1/12f, 0);
+						}
 				
-			}
-			
-		}
-		
-		//PLAYER STILL
-		} else if (!MyInput.isDown(MyInput.BUTTON4) && !MyInput.isDown(MyInput.BUTTON3) && !MyInput.isDown(MyInput.BUTTON2)) {
-				
-				player.getBody().setLinearVelocity(0f, player.getBody().getLinearVelocity().y);
-				
-				if (anim == 2) {
-					
-					tex = PixelGame.res.getTexture("idle2");
-					
-					TextureRegion[] sprites = TextureRegion.split(tex, 46 , 46)[0];
-					
-					anim = -2;
-					player.setAnimation(sprites, 1/12f, 0);
-					
-					
-				
-				} else if (anim == 3) {
-					
-					tex = PixelGame.res.getTexture("idle");
-					
-					TextureRegion[] sprites = TextureRegion.split(tex, 46 , 46)[0];
-					
-					anim = -3;
-					player.setAnimation(sprites, 1/12f, 0);
-					
-					
-					
 				}
-				
+			
 			}
+		
+		} 
+		
+		
 		
 	}
 		
@@ -241,6 +292,8 @@ public class Play extends GameState {
 	public void update(float dt) {
 		
 		handleInput(); // INPUT CHECK
+		timeAttack++;
+		System.out.println(anim);
 		
 		world.step(PixelGame.STEP, 1, 1); //WORLD UPDATE
 		
@@ -258,9 +311,13 @@ public class Play extends GameState {
 			
 		}
 		
+		
+		
 		bodies.clear();
 		
 		player.update(dt);
+		
+		snake.update(dt);
 		
 		for (int i = 0; i < crystals.size; i++) {
 			
@@ -277,6 +334,7 @@ public class Play extends GameState {
 		
 		//cam follow
 		cam.position.set(player.getPosition().x * PPM + PixelGame.vWIDTH / 6, PixelGame.vHEIGHT / 2, 0);
+		
 		cam.update();
 		
 		//draw background
@@ -291,6 +349,10 @@ public class Play extends GameState {
 		//draw player
 		sb.setProjectionMatrix(cam.combined);
 		player.render(sb);
+		
+		//draw snake
+		sb.setProjectionMatrix(cam.combined);
+		snake.render(sb);
 		
 		//draw crystals
 		
@@ -334,7 +396,7 @@ public class Play extends GameState {
 		shape.setAsBox(8/PPM, 15/PPM);
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.bitPlayer;
-		fdef.filter.maskBits = B2DVars.bitPlatform | B2DVars.bitCrystal;
+		fdef.filter.maskBits = B2DVars.bitPlatform | B2DVars.bitCrystal | B2DVars.bitEnemy;
 		fdef.friction = 0.5f;
 		body.createFixture(fdef).setUserData("player");	
 		
@@ -403,7 +465,7 @@ public class Play extends GameState {
 				fdef.friction = 0.005f;
 				fdef.shape = cs;
 				fdef.filter.categoryBits = bits;
-				fdef.filter.maskBits = B2DVars.bitPlayer;
+				fdef.filter.maskBits = B2DVars.bitPlayer | B2DVars.bitEnemy;
 				fdef.isSensor = false;
 				world.createBody(bdef).createFixture(fdef);
 		
@@ -461,6 +523,42 @@ public class Play extends GameState {
 		
 		Texture back = PixelGame.res.getTexture("background");
 		spr = new Sprite(back);
+		
+		
+	}
+	
+	private void createEnemy() {
+		
+		BodyDef bdef = new BodyDef();
+		
+		//static body = not affected by forces, cant move
+		//kinematic body = not affected by forces, can move
+		//dynamic body = always affected by forces, can move
+		
+		PolygonShape shape = new PolygonShape();
+		FixtureDef fdef = new FixtureDef();
+		
+		bdef.position.set(200/PPM,200/PPM);
+		bdef.type = BodyType.DynamicBody;
+		Body body = world.createBody(bdef);
+		
+		shape.setAsBox(8/PPM, 15/PPM);
+		fdef.shape = shape;
+		fdef.filter.categoryBits = B2DVars.bitEnemy;
+		fdef.filter.maskBits = B2DVars.bitPlatform | B2DVars.bitPlayer;
+		fdef.friction = 0.5f;
+		body.createFixture(fdef).setUserData("snake");	
+		
+		//CREATE FOOT SENSOR (SENSOR == GHOST FIXTURE DETECTIN COLLISIONS)
+		
+		shape.setAsBox(10/PPM, 2/PPM, new Vector2(0, -18/PPM), 0);
+		fdef.shape = shape;
+		fdef.filter.categoryBits = B2DVars.bitEnemy;
+		fdef.filter.maskBits = B2DVars.bitPlatform | B2DVars.bitPlayer;
+		fdef.isSensor = true;
+		body.createFixture(fdef).setUserData("snakeFoot"); 
+		
+		snake = new Enemy(body);
 		
 		
 	}

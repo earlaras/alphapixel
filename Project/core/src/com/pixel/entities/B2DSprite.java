@@ -29,6 +29,12 @@ public class B2DSprite {
 		
 	}
 	
+	public void setAnimation(Animation anim) {
+		this.animation = anim;
+		width = anim.getFrame().getRegionWidth();
+		height = anim.getFrame().getRegionHeight();
+	}
+	
 	public void update (float dt) {
 		
 		animation.update(dt);
